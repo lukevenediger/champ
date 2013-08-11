@@ -12,17 +12,20 @@ namespace champ
 {
   public class SiteBuilder
   {
+    private static readonly Lazy<RazorMachine> _razor = new Lazy<RazorMachine>(() =>
+      new RazorMachine(baseType: typeof(ChampTemplateBase), htmlEncode: false));
+    public static RazorMachine Razor { get { return _razor.Value; } }
     private DirectoryInfo _sourcePath;
     private DirectoryInfo _outputPath; 
     private Markdown _markdown;
-    private RazorMachine _razor;
+    private string _defaultTemplate;
 
-    public SiteBuilder(string sourcePath, string outputPath)
+    public SiteBuilder(string sourcePath, string outputPath, string defaultTemplate)
     {
       _sourcePath = new DirectoryInfo(sourcePath);
       _outputPath = string.IsNullOrEmpty(outputPath) ? new DirectoryInfo(Path.Combine(sourcePath, Constants.OUTPUT)) : _outputPath;
-      _markdown = new Markdown();
-      _razor = new RazorMachine(baseType: typeof(ChampTemplateBase), htmlEncode: false);
+      _defaultTemplate = defaultTemplate;
+      _markdown = new Markdown(new MarkdownOptions() { AutoHyperlink = true });
     }
 
     public void Run()
@@ -37,6 +40,7 @@ namespace champ
       var globalSettings = LoadGlobalSettings();
       // Delete what's in the output folder
       _outputPath.RecursiveDelete();
+      // Build the site map
       var rootNode = SiteMapFactory.BuildSiteMap(_sourcePath, globalSettings);
       // Copy static content
       _sourcePath
@@ -50,12 +54,19 @@ namespace champ
 
     private dynamic LoadGlobalSettings()
     {
-      FileInfo settingsFile;
-      if (_sourcePath.TryGetFile("settings.*", out settingsFile))
+      dynamic globalSettings = null;
+      globalSettings = new BetterExpando();
+      // Set the default template if required
+      if (!String.IsNullOrEmpty(_defaultTemplate))
       {
-        return settingsFile.GetProperties();
+        globalSettings.template = _defaultTemplate;
       }
-      return new BetterExpando();
+      else
+      {
+        globalSettings.template = "no_template_defined";
+      }
+      globalSettings.title = "Title Not Set";
+      return globalSettings;
     }
 
     private void LoadTemplates()
@@ -66,8 +77,10 @@ namespace champ
         .ForEach(file =>
           {
             // Register each template
-            _razor.RegisterTemplate(file.Name, file.ReadAllText());
+            Razor.RegisterTemplate(file.Name, file.ReadAllText());
           });
+      // Register the default template
+      Razor.RegisterTemplate("no_template_defined", "<h1>No template defined!</h1> @Model.Content");
     }
 
     private void ProcessPages(Node node)
@@ -81,9 +94,9 @@ namespace champ
       else if (node is PageNode)
       {
         var page = node as PageNode;
-        var raw = _markdown.Transform(page.GetRawContent());
-        var template = _razor.GetTemplate("~/" + page.Template + ".cshtml");
-        var output = _razor.ExecuteContent(template, model: new { page = page, Content = raw });
+        var raw = ProcessMarkdown(page.GetRawContent());
+        var template = Razor.GetTemplate("~/" + page.Template + ".cshtml");
+        var output = Razor.ExecuteContent(template, model: new { page = page, Content = raw });
         var outputPath = page.GetOutputFileName().Replace(_sourcePath.Subdirectory(Constants.PAGES).FullName, _outputPath.FullName);
         File.WriteAllText(outputPath, output.Result);
       }
@@ -91,6 +104,20 @@ namespace champ
       {
         ProcessPages(child);                
       }
+    }
+
+    private string ProcessMarkdown(string rawContent)
+    {
+      var output = _markdown.Transform(rawContent);
+      // Look for any page: urls
+      int index = 0;
+      while (index <= output.Length) 
+      {
+        index = output.IndexOf("href=\"page:", index);
+        string pageName = output.Substring(index + 10
+      }
+      output.IndexOf(
+      return output; 
     }
   }
 }

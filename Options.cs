@@ -9,11 +9,14 @@ namespace champ
 {
   internal class Options
   {
-    [Option('b', "build", HelpText="Builds the site", Required=false)]
-    public bool Build { get; set; }
     [ValueOption(0)]
     public string Source { get; set; }
     [ValueOption(1)]
     public string Destination { get; set; }
+
+    [Option('b', "build", HelpText="Builds the site", Required=false)]
+    public bool Build { get; set; }
+    [Option('t', "template", HelpText = "Specifies the default template.", Required = false)]
+    public string DefaultTemplate { get; set; }
   }
 }

@@ -10,8 +10,8 @@ namespace champ.Map
   {
     public FileInfo PageFile { get; private set; }
     public String PageName { get; private set; }
-    public string Template { get; private set; }
     public string Title { get; private set; }
+    public string Template { get; set; }
 
     public PageNode(FileInfo file, dynamic globalSettings)
       : base(Path.ChangeExtension(file.Name, "html"))
@@ -19,7 +19,7 @@ namespace champ.Map
       PageFile = file;
       PageName = Path.ChangeExtension(file.Name, "html");
       var properties = file.GetProperties().Augment(globalSettings);
-      Template = properties.template;
+      Template = properties.HasProperty("template") ? properties.template : null;
       Title = properties.title;
     }
 

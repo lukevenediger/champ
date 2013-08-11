@@ -16,7 +16,7 @@ namespace champ
       {
         if (options.Build)
         {
-          new SiteBuilder(options.Source, options.Destination).Run();
+          new SiteBuilder(options.Source, options.Destination, options.DefaultTemplate).Run();
         }
       }
     }

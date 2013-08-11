@@ -57,6 +57,11 @@ namespace champ
       return this;
     }
 
+    public bool HasProperty(string name)
+    {
+      return _dict.ContainsKey(name);
+    }
+
     public override string ToString()
     {
       return String.Join(", ", _dict.Select(pair => pair.Key + " = " + pair.Value).ToArray());

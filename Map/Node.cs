@@ -11,21 +11,18 @@ namespace champ.Map
   {
     public List<Node> Children { get; private set; }
     public Node Parent { get; private set; }
-    public int Depth { get; private set; }
     private string _sitePath;
 
     public Node(string sitePath)
     {
       Children = new List<Node>();
       _sitePath = sitePath;
-      Depth = 0;
     }
 
     public void AddChild(Node node)
     {
       node.Parent = this;
       Children.Add(node);
-      node.Depth = this.Depth + 1;
     }
     
     public override string ToString()
@@ -37,6 +34,18 @@ namespace champ.Map
       else
       {
         return _sitePath;
+      }
+    }
+
+    public virtual int GetDepth()
+    {
+      if (this.Parent != null)
+      {
+        return this.Parent.GetDepth();
+      }
+      else
+      {
+        return 0;
       }
     }
   }

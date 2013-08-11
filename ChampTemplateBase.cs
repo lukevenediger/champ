@@ -14,11 +14,21 @@ namespace champ
     {
       var node = Model.page as PageNode;
       var prefix = "";
-      for (var counter = 0; counter < node.Depth; counter++)
+      var depth = node.GetDepth();
+      for (var counter = 0; counter < depth; counter++)
       {
         prefix += "../";
       }
-      return "<link rel=\"stylesheet\" href=\"" + prefix + filename + "\" />";
+      return prefix + filename;
+    }
+
+    public virtual string Include(string template)
+    {
+      var templateContent = SiteBuilder.Razor.GetTemplate("~/" + template + ".cshtml");
+      // Remove the file extension
+      // Render the page at the template
+      ITemplate output = SiteBuilder.Razor.Execute(templateContent, this.Model);
+      return output.Result;
     }
   }
 

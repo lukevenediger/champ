@@ -23,5 +23,17 @@ namespace champ.Map
     {
       return (Parent == null ? _sitePath : Parent.ToString() + _sitePath) + "/";
     }
+
+    public override int GetDepth()
+    {
+      if (this.Parent != null)
+      {
+        return this.Parent.GetDepth() + 1;
+      }
+      else
+      {
+        return 0;
+      }
+    }
   }
 }
