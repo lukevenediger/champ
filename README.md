@@ -21,7 +21,7 @@ c:\mysite\champ.exe --bootstrap
 champ will start creating all required folders and add a few example pages. Now build your site:
 
 ```
-c:\mysite\champ.exe . output
+c:\mysite\champ.exe .   <-- don't forget the period!
 ```
 
 You won't see anything appear in the console, unless there's an error.
