@@ -8,7 +8,7 @@ Features include:
 * Callbacks to resolve URLS for subdirectories
 
 ## Download champ
-The tool is packaged as a single .exe file. Download the latest release from here: 
+The tool is packaged as a single .exe file. Download the latest release of champ.exe from here: [champ v1.0](https://github.com/lukevenediger/champ/releases/tag/v1.0)
 
 ## Getting Started
 Getting started with champ is easy. Copy champ.exe into the root folder of your project, open command prompt 
