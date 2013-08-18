@@ -15,14 +15,19 @@ namespace champ
     /// Copies the contents of a directory to the destination.
     /// </summary>
     /// <remarks>Taken from http://stackoverflow.com/a/15648301/2363991 </remarks>
-    public static void CopyTo(this DirectoryInfo sourcePath, DirectoryInfo destinationPath, bool overwrite = false)
+    public static void CopyTo(this DirectoryInfo sourcePath, 
+      DirectoryInfo destinationPath, 
+      bool overwrite = false,
+      string[] excludedExtensions = null)
     {
+      excludedExtensions = excludedExtensions ?? new string[] { };
       foreach (var sourceSubDirPath in sourcePath.EnumerateDirectories("*", SearchOption.AllDirectories))
       {
         Directory.CreateDirectory(sourceSubDirPath.FullName.Replace(sourcePath.FullName, destinationPath.FullName));
       }
 
-      foreach (var file in sourcePath.EnumerateFiles("*", SearchOption.AllDirectories))
+      // Copy all files except those that have been excluded by extension
+      foreach (var file in sourcePath.EnumerateFiles("*", SearchOption.AllDirectories).Where(f => !excludedExtensions.Contains(f.Extension)))
       {
         File.Copy(file.FullName, file.FullName.Replace(sourcePath.FullName, destinationPath.FullName), overwrite);
       }
@@ -35,12 +40,23 @@ namespace champ
 
     public static string GetTemplate(this RazorMachine razor, string templateName)
     {
-      return razor.GetRegisteredInMemoryTemplates()[templateName];
+      try
+      {
+        return razor.GetRegisteredInMemoryTemplates()[templateName];
+      }
+      catch (KeyNotFoundException ex)
+      {
+        throw new KeyNotFoundException("Could not find a template called " + templateName);
+      }
     }
 
     public static void RecursiveDelete(this DirectoryInfo directory)
     {
-      directory.GetFiles("*", SearchOption.AllDirectories).ToList().ForEach(p => p.Delete());
+      var files = directory.GetFiles("*", SearchOption.AllDirectories)
+        .Where(p => !p.DirectoryName.Split('\\').Any(n => n.StartsWith(".")))
+        .Where(p => !p.Name.StartsWith("."))
+        .ToList();
+      files.ForEach(p => p.Delete());
     }
 
     public static DirectoryInfo Subdirectory(this DirectoryInfo directory, string subdirectoryName, bool createIfNotExists = false)

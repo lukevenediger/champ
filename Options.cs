@@ -14,9 +14,19 @@ namespace champ
     [ValueOption(1)]
     public string Destination { get; set; }
 
-    [Option('b', "build", HelpText="Builds the site", Required=false)]
-    public bool Build { get; set; }
     [Option('t', "template", HelpText = "Specifies the default template.", Required = false)]
     public string DefaultTemplate { get; set; }
+    [Option('b', "bootstrap", HelpText = "Download a bootstrapped site to use with champ.", Required = false, DefaultValue = false)]
+    public bool Bootstrap { get; set; }
+    [Option('h', "help", HelpText = "Prints this help text. More info at https://github.com/lukevenediger/champ", Required = false, DefaultValue = false)]
+    public bool Help { get; set; }
+
+    public static string HelpText
+    {
+      get
+      {
+        return "Usage: champ.exe [--template TEMPLATE] [--bootstrap] SOURCE-DIR DESTINATION-DIR";
+      }
+    }
   }
 }

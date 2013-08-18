@@ -23,7 +23,7 @@ namespace champ
     public SiteBuilder(string sourcePath, string outputPath, string defaultTemplate)
     {
       _sourcePath = new DirectoryInfo(sourcePath);
-      _outputPath = string.IsNullOrEmpty(outputPath) ? new DirectoryInfo(Path.Combine(sourcePath, Constants.OUTPUT)) : _outputPath;
+      _outputPath = string.IsNullOrEmpty(outputPath) ? new DirectoryInfo(Path.Combine(sourcePath, Constants.OUTPUT)) : new DirectoryInfo(outputPath);
       _defaultTemplate = defaultTemplate;
       _markdown = new Markdown(new MarkdownOptions() { AutoHyperlink = true });
     }
@@ -38,6 +38,11 @@ namespace champ
      
       // Load global settings
       var globalSettings = LoadGlobalSettings();
+      // Create the output folder if it doesn't exist
+      if (!_outputPath.Exists)
+      {
+        _outputPath.Create();
+      }
       // Delete what's in the output folder
       _outputPath.RecursiveDelete();
       // Build the site map
@@ -46,6 +51,10 @@ namespace champ
       _sourcePath
         .Subdirectory(Constants.STATIC_CONTENT)
         .CopyTo(_outputPath.Subdirectory(Constants.STATIC_CONTENT, true));
+      // Copy files that aren't .md files
+      _sourcePath
+        .Subdirectory(Constants.PAGES)
+        .CopyTo(_outputPath, excludedExtensions : new string[] { ".md" });
       // Load templates
       LoadTemplates();
       // Build out pages
@@ -94,7 +103,7 @@ namespace champ
       else if (node is PageNode)
       {
         var page = node as PageNode;
-        var raw = ProcessMarkdown(page.GetRawContent());
+        var raw = _markdown.Transform(page.GetRawContent());
         var template = Razor.GetTemplate("~/" + page.Template + ".cshtml");
         var output = Razor.ExecuteContent(template, model: new { page = page, Content = raw });
         var outputPath = page.GetOutputFileName().Replace(_sourcePath.Subdirectory(Constants.PAGES).FullName, _outputPath.FullName);
@@ -104,20 +113,6 @@ namespace champ
       {
         ProcessPages(child);                
       }
-    }
-
-    private string ProcessMarkdown(string rawContent)
-    {
-      var output = _markdown.Transform(rawContent);
-      // Look for any page: urls
-      int index = 0;
-      while (index <= output.Length) 
-      {
-        index = output.IndexOf("href=\"page:", index);
-        string pageName = output.Substring(index + 10
-      }
-      output.IndexOf(
-      return output; 
     }
   }
 }
