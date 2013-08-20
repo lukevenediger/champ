@@ -41,7 +41,15 @@ namespace champ
         }
 
         // Last but not least, just run the tool
-        new SiteBuilder(options.Source, options.Destination, options.DefaultTemplate).Run();
+        if (options.Watch)
+        {
+          var watcher = new Watcher(options.Source, options.Destination, options.DefaultTemplate);
+          watcher.Watch();
+        }
+        else
+        {
+          new SiteBuilder(options.Source, options.Destination, options.DefaultTemplate).Run();
+        }
       }
     }
   }

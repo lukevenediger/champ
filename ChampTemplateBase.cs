@@ -37,12 +37,17 @@ namespace champ
       }
     }
 
+    public virtual string ValueOrDefault(string value, string defaultValue)
+    {
+      return String.IsNullOrEmpty(value) ? defaultValue : value;
+    }
+
     public virtual string Include(string template)
     {
       var templateContent = SiteBuilder.Razor.GetTemplate("~/" + template + ".cshtml");
       // Remove the file extension
       // Render the page at the template
-      ITemplate output = SiteBuilder.Razor.Execute(templateContent, this.Model);
+      ITemplate output = SiteBuilder.Razor.Execute(templateContent, this.Model, viewbag: this.ViewBag);
       return output.Result;
     }
   }

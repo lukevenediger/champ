@@ -44,7 +44,7 @@ namespace champ
       {
         return razor.GetRegisteredInMemoryTemplates()[templateName];
       }
-      catch (KeyNotFoundException ex)
+      catch (KeyNotFoundException)
       {
         throw new KeyNotFoundException("Could not find a template called " + templateName);
       }

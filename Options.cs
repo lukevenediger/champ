@@ -18,6 +18,8 @@ namespace champ
     public string DefaultTemplate { get; set; }
     [Option('b', "bootstrap", HelpText = "Download a bootstrapped site to use with champ.", Required = false, DefaultValue = false)]
     public bool Bootstrap { get; set; }
+    [Option('w', "watch", HelpText = "Watch for changes and regenerate the site.", Required = false, DefaultValue = false)]
+    public bool Watch {get; set;}
     [Option('h', "help", HelpText = "Prints this help text. More info at https://github.com/lukevenediger/champ", Required = false, DefaultValue = false)]
     public bool Help { get; set; }
 
@@ -25,7 +27,7 @@ namespace champ
     {
       get
       {
-        return "Usage: champ.exe [--template TEMPLATE] [--bootstrap] SOURCE-DIR DESTINATION-DIR";
+        return "Usage: champ.exe [--template TEMPLATE] [--bootstrap] [--watch] SOURCE-DIR [DESTINATION-DIR]";
       }
     }
   }
