@@ -22,6 +22,21 @@ namespace champ
       return prefix + filename;
     }
 
+    /// <summary>
+    /// Returns 'value' if the condition is true.
+    /// </summary>
+    public virtual string ValueIf ( bool condition, string value )
+    {
+      if ( condition )
+      {
+        return value;
+      }
+      else
+      {
+        return String.Empty;
+      }
+    }
+
     public virtual string Include(string template)
     {
       var templateContent = SiteBuilder.Razor.GetTemplate("~/" + template + ".cshtml");

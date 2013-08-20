@@ -11,11 +11,13 @@ namespace champ
   {
     private Dictionary<string, object> _dict;
     private bool _ignoreCase;
+    private bool _returnEmptyStringForMissingProperties;
 
-    public BetterExpando(bool ignoreCase = false)
+    public BetterExpando(bool ignoreCase = false, bool returnEmptyStringForMissingProperties = false)
     {
       _dict = new Dictionary<string, object>();
       _ignoreCase = ignoreCase;
+      _returnEmptyStringForMissingProperties = returnEmptyStringForMissingProperties;
     }
 
     public override bool TrySetMember(SetMemberBinder binder, object value)
@@ -44,6 +46,11 @@ namespace champ
       if (_dict.ContainsKey(key))
       {
         result = _dict[key];
+        return true;
+      }
+      if ( _returnEmptyStringForMissingProperties )
+      {
+        result = String.Empty;
         return true;
       }
       return base.TryGetMember(binder, out result);

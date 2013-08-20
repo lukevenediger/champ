@@ -132,7 +132,7 @@ namespace champ
 
     public static dynamic GetProperties(this FileInfo file)
     {
-      dynamic properties = new BetterExpando(ignoreCase: true);
+      dynamic properties = new BetterExpando(ignoreCase: true, returnEmptyStringForMissingProperties: true);
       File.ReadAllLines(file.FullName)
         .TakeUpTo(line => line.Contains("-->"))
         .Where(line => !String.IsNullOrEmpty(line))

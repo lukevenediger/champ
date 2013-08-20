@@ -105,7 +105,7 @@ namespace champ
         var page = node as PageNode;
         var raw = _markdown.Transform(page.GetRawContent());
         var template = Razor.GetTemplate("~/" + page.Template + ".cshtml");
-        var output = Razor.ExecuteContent(template, model: new { page = page, Content = raw });
+        var output = Razor.ExecuteContent( template, model: new { page = page, Content = raw }, viewbag: page.Properties );
         var outputPath = page.GetOutputFileName().Replace(_sourcePath.Subdirectory(Constants.PAGES).FullName, _outputPath.FullName);
         File.WriteAllText(outputPath, output.Result);
       }
