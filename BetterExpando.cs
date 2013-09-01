@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace champ
 {
@@ -13,6 +11,11 @@ namespace champ
     private bool _ignoreCase;
     private bool _returnEmptyStringForMissingProperties;
 
+    /// <summary>
+    /// Creates a BetterExpando object/
+    /// </summary>
+    /// <param name="ignoreCase">Don't be strict about property name casing.</param>
+    /// <param name="returnEmptyStringForMissingProperties">If true, returns String.Empty for missing properties.</param>
     public BetterExpando(bool ignoreCase = false, bool returnEmptyStringForMissingProperties = false)
     {
       _dict = new Dictionary<string, object>();
@@ -56,6 +59,11 @@ namespace champ
       return base.TryGetMember(binder, out result);
     }
 
+    /// <summary>
+    /// Combine two instances together to get a union.
+    /// </summary>
+    /// <returns>This instance but with additional properties</returns>
+    /// <remarks>Existing properties are not overwritten.</remarks>
     public dynamic Augment(BetterExpando obj)
     {
       obj._dict
@@ -64,14 +72,21 @@ namespace champ
       return this;
     }
 
+    /// <summary>
+    /// Check if BetterExpando contains a property.
+    /// </summary>
+    /// <remarks>Respects the case sensitivity setting</remarks>
     public bool HasProperty(string name)
     {
-      return _dict.ContainsKey(name);
+      return _dict.ContainsKey(_ignoreCase ? name.ToLower() : name);
     }
 
+    /// <summary>
+    /// Returns this object as comma-separated name-value pairs.
+    /// </summary>
     public override string ToString()
     {
-      return String.Join(", ", _dict.Select(pair => pair.Key + " = " + pair.Value).ToArray());
+      return String.Join(", ", _dict.Select(pair => pair.Key + " = " + pair.Value ?? "(null)").ToArray());
     }
 
     private void UpdateDictionary(string name, object value)
