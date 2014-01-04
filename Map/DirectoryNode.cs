@@ -21,7 +21,7 @@ namespace champ.Map
 
     public override string ToString()
     {
-      return (Parent == null ? _sitePath : Parent.ToString() + _sitePath) + "/";
+      return Parent == null ? _sitePath : (Parent.ToString() + _sitePath + "/");
     }
 
     public override int GetDepth()

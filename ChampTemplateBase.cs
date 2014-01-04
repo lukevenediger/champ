@@ -10,9 +10,16 @@ namespace champ
 {
   public abstract class ChampTemplateBase : TemplateBase
   {
+    public virtual PageListCollection Lists { get; private set; }
+
+    public ChampTemplateBase()
+    {
+      Lists = new PageListCollection();
+    }
+
     public virtual string ResolveUrl(string filename)
     {
-      var node = Model.page as PageNode;
+      var node = Model.Page as PageNode;
       var prefix = "";
       var depth = node.GetDepth();
       for (var counter = 0; counter < depth; counter++)
@@ -20,6 +27,11 @@ namespace champ
         prefix += "../";
       }
       return prefix + filename;
+    }
+
+    public virtual string ResolvePage(PageNode page)
+    {
+      return ResolveUrl(page.ToString());
     }
 
     /// <summary>

@@ -11,7 +11,15 @@ namespace champ.Map
   {
     public List<Node> Children { get; private set; }
     public Node Parent { get; private set; }
+    public Node Root { get { return GetRootNode(); } }
+    public PageListCollection PageLists
+    {
+      get { return GetPageLists(); } 
+      set { SetPageLists(value); } 
+    }
+
     private string _sitePath;
+    private PageListCollection _pageLists;
 
     public Node(string sitePath)
     {
@@ -47,6 +55,44 @@ namespace champ.Map
       {
         return 0;
       }
+    }
+
+    private Node GetRootNode()
+    {
+      if (this.Parent != null)
+      {
+        return this.Parent.GetRootNode();
+      }
+      else
+      {
+        // I am the root node
+        return this;
+      }
+    }
+
+    private PageListCollection GetPageLists()
+    {
+      if (this.Parent != null)
+      {
+        return this.Parent.GetPageLists();
+      }
+      else
+      {
+        if (_pageLists == null)
+        {
+          _pageLists = new PageListCollection();
+        }
+        return _pageLists;
+      }
+    }
+
+    private void SetPageLists(PageListCollection pageLists)
+    {
+      if (this.Parent != null)
+      {
+        throw new Exception("Page lists can only be updated on the root node.");
+      }
+      _pageLists = pageLists;
     }
   }
 }

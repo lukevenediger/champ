@@ -42,7 +42,7 @@ namespace champ
     {
       try
       {
-        return razor.GetRegisteredInMemoryTemplates()[templateName];
+        return razor.GetRegisteredInMemoryTemplates()[templateName.ToLower()];
       }
       catch (KeyNotFoundException)
       {

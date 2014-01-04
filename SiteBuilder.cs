@@ -10,6 +10,9 @@ using Xipton.Razor;
 
 namespace champ
 {
+  /// <summary>
+  /// Builds a website using templates, static files and content
+  /// </summary>
   public class SiteBuilder
   {
     private static readonly Lazy<RazorMachine> _razor = new Lazy<RazorMachine>(() =>
@@ -86,7 +89,7 @@ namespace champ
         .ForEach(file =>
           {
             // Register each template
-            Razor.RegisterTemplate(file.Name, file.ReadAllText());
+            Razor.RegisterTemplate(file.Name.ToLower(), file.ReadAllText());
           });
       // Register the default template
       Razor.RegisterTemplate("no_template_defined", "<h1>No template defined!</h1> @Model.Content");
@@ -102,17 +105,25 @@ namespace champ
       }
       else if (node is PageNode)
       {
-        var page = node as PageNode;
-        var raw = _markdown.Transform(page.GetRawContent());
-        var template = Razor.GetTemplate("~/" + page.Template + ".cshtml");
-        var output = Razor.ExecuteContent( template, model: new { page = page, Content = raw }, viewbag: page.Properties );
-        var outputPath = page.GetOutputFileName().Replace(_sourcePath.Subdirectory(Constants.PAGES).FullName, _outputPath.FullName);
-        File.WriteAllText(outputPath, output.Result);
+        ProcessPageNode(node as PageNode);
       }
       foreach (var child in node.Children)
       {
         ProcessPages(child);                
       }
+    }
+
+    private void ProcessPageNode(PageNode page)
+    {
+      var rawContent = _markdown.Transform(page.GetRawContent());
+      var template = Razor.GetTemplate("~/" + page.Template + ".cshtml");
+      var pageModel = new PageModel(page, rawContent, page.PageLists);
+      var output = Razor.ExecuteContent(template,
+        model: pageModel,
+        viewbag: page.Properties
+      );
+      var outputPath = page.GetOutputFileName().Replace(_sourcePath.Subdirectory(Constants.PAGES).FullName, _outputPath.FullName);
+      File.WriteAllText(outputPath, output.Result);
     }
   }
 }
