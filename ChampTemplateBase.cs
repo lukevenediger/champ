@@ -37,9 +37,17 @@ namespace champ
     /// <summary>
     /// Returns 'value' if the condition is true.
     /// </summary>
-    public virtual string ValueIf ( bool condition, string value )
+    public virtual string ValueIf ( object condition, string value )
     {
-      if ( condition )
+      if (condition == null)
+      {
+        return String.Empty;
+      }
+      if (condition is String )
+      {
+        return (string)condition == String.Empty ? String.Empty : value;
+      }
+      if ( (bool)condition )
       {
         return value;
       }

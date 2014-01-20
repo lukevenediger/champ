@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using CommandLine.Text;
 using System;
 using System.Collections.Generic;
 using System.IO;

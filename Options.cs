@@ -27,7 +27,14 @@ namespace champ
     {
       get
       {
-        return "Usage: champ.exe [--template TEMPLATE] [--bootstrap] [--watch] SOURCE-DIR [DESTINATION-DIR]";
+        var help = CommandLine.Text.HelpText.AutoBuild(new Options());
+        return String.Join("\n",
+          help,
+          "Examples:",
+          @"  champ.exe c:\mysite                    Rebuild and save in c:\mysite\output",
+          @"  champ.exe c:\mysite c:\output",
+          @"  champ.exe c:\mysite c:\output --watch  Watch c:\mysite for file changes"
+          );
       }
     }
   }
