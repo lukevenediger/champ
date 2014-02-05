@@ -88,6 +88,30 @@ champ.exe SOURCE-DIRECTORY OUTPUT-DIRECTORY
 > Note: champ will delete everything from the output directory before building your site. Only files and directories
 that start with a period (.) will be ignored.
 
+### Errors
+Compilation errors are shown in the page that was trying to be created. The error page shows you the compilation
+error message, the offending line number and a short snippet of the broken code.
+
+## More Options
+
+### Watch for changes and automatically generate the output
+The --watch option will scan the source directory for any file changes and automatically generate the
+new output. Use this when you're busy developing your site content and don't want to have to keep
+starting champ after every change.
+
+```
+champ.exe --watch C:\src\lukevenediger.github.io C:\src\lukevenediger.github.io-live
+```
+
+### Downloading champ-bootstrap from a file share
+You can specify a file or UNC path for the location of champ-bootstrap by using the --bootstrap-source option:
+
+```
+champ.exe --bootstrap --bootstrap-source \\myserver\share\champ\champ-bootstrap.zip
+```
+
+If you don't specify --bootstrap-source champ will try download the latest zip file from github.com.
+
 ## Project Info
 
 ### Getting Help

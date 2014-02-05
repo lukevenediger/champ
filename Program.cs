@@ -37,7 +37,7 @@ namespace champ
         if (options.Bootstrap)
         {
           var source = String.IsNullOrEmpty(options.Source) ? "." : options.Source;
-          new Bootstrap(source).Run();
+          new Bootstrap(source, options.BootstrapSource).Run();
           return;
         }
 

@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>packages\RazorMachine.2.6.1\lib\net40\System.Web.Razor.dll</HintPath>
@@ -66,6 +67,7 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="ChampTemplateBase.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Debug\ErrorPageFactory.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Map\DirectoryNode.cs" />
     <Compile Include="Map\Node.cs" />

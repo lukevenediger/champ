@@ -1,4 +1,5 @@
-﻿using champ.Map;
+﻿using champ.Debug;
+using champ.Map;
 using MarkdownSharp;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xipton.Razor;
+using Xipton.Razor.Core;
 
 namespace champ
 {
@@ -116,14 +118,23 @@ namespace champ
     private void ProcessPageNode(PageNode page)
     {
       var rawContent = _markdown.Transform(page.GetRawContent());
-      var template = Razor.GetTemplate("~/" + page.Template + ".cshtml");
+      var templateFile = "~/" + page.Template + ".cshtml";
+      var template = Razor.GetTemplate(templateFile);
       var pageModel = new PageModel(page, rawContent, page.PageLists);
-      var output = Razor.ExecuteContent(template,
-        model: pageModel,
-        viewbag: page.Properties
-      );
+      string renderedContent = null;
+      try
+      {
+        renderedContent = Razor.ExecuteContent(template,
+          model: pageModel,
+          viewbag: page.Properties
+        ).Result;
+      } 
+      catch (TemplateCompileException e)
+      {
+        renderedContent = ErrorPageFactory.BuildCompilationError(template, templateFile, page, e);
+      }
       var outputPath = page.GetOutputFileName().Replace(_sourcePath.Subdirectory(Constants.PAGES).FullName, _outputPath.FullName);
-      File.WriteAllText(outputPath, output.Result);
+      File.WriteAllText(outputPath, renderedContent);
     }
   }
 }

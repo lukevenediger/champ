@@ -12,6 +12,7 @@ namespace champ.Map
     public FileInfo PageFile { get; private set; }
     public String PageName { get; private set; }
     public string Title { get; private set; }
+    public string Summary { get; private set; }
     public string Template { get; set; }
     public dynamic Properties { get; set; }
     public DateTime DateStamp { get; private set; }
@@ -24,6 +25,7 @@ namespace champ.Map
       PageName = Path.ChangeExtension(file.Name, "html");
       Properties = file.GetProperties().Augment(globalSettings);
       Template = Properties.HasProperty("template") ? Properties.template : null;
+      Summary = Properties.HasProperty("summary") ? Properties.summary : null;
       Title = Properties.title;
       ListName = Properties.HasProperty("list") ? Properties.list : null;
 
