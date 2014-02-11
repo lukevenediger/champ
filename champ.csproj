@@ -67,7 +67,7 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="ChampTemplateBase.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Debug\ErrorPageFactory.cs" />
+    <Compile Include="DebugHelper\ErrorPageFactory.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Map\DirectoryNode.cs" />
     <Compile Include="Map\Node.cs" />

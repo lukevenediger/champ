@@ -1,4 +1,4 @@
-﻿using champ.Debug;
+﻿using champ.DebugHelper;
 using champ.Map;
 using MarkdownSharp;
 using System;
@@ -53,9 +53,12 @@ namespace champ
       // Build the site map
       var rootNode = SiteMapFactory.BuildSiteMap(_sourcePath, globalSettings);
       // Copy static content
-      _sourcePath
-        .Subdirectory(Constants.STATIC_CONTENT)
-        .CopyTo(_outputPath.Subdirectory(Constants.STATIC_CONTENT, true));
+      if (_sourcePath.Subdirectory(Constants.STATIC_CONTENT).Exists)
+      {
+        _sourcePath
+          .Subdirectory(Constants.STATIC_CONTENT)
+          .CopyTo(_outputPath.Subdirectory(Constants.STATIC_CONTENT, true));
+      }
       // Copy files that aren't .md files
       _sourcePath
         .Subdirectory(Constants.PAGES)
