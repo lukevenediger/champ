@@ -24,6 +24,8 @@ namespace champ
     public bool Watch {get; set;}
     [Option('h', "help", HelpText = "Prints this help text. More info at https://github.com/lukevenediger/champ", Required = false, DefaultValue = false)]
     public bool Help { get; set; }
+    [Option('v', "verbose", HelpText = "Enable verbose logging (useful for bug reports)", Required = false, DefaultValue = false)]
+    public bool EnableVerboseLogging { get; set; }
 
     public static string HelpText
     {

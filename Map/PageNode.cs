@@ -57,6 +57,5 @@ namespace champ.Map
     {
       return Path.ChangeExtension(PageFile.FullName, "html");
     }
-
   }
 }

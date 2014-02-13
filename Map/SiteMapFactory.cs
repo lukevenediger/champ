@@ -11,11 +11,13 @@ namespace champ.Map
   {
     public static Node BuildSiteMap(DirectoryInfo rootPath, dynamic globalSettings)
     {
+      Log.Debug("[SiteMapFactory] BuildSiteMap()");
       var pageLists = new PageListCollection();
       // Process Pages
       var rootNode = ProcessPages(rootPath.Subdirectory(Constants.PAGES), 
         globalSettings, 
         pageLists);
+      Log.Debug("[SiteMapFactory] Root node is at " + rootNode.Path);
       rootNode.PageLists = pageLists;
       return rootNode;
     }

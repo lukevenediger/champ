@@ -35,6 +35,7 @@ namespace champ
       Console.WriteLine("Watching for changes. Press Enter to force regeneration or CTRL^C to quit.");
       Console.CancelKeyPress += (sender, e) =>
         {
+          Log.Debug("[Watcher] CTRL^C caught");
           _quitNotification.Set();
         };
 
@@ -46,11 +47,15 @@ namespace champ
       _fsWatcher.Renamed += new RenamedEventHandler(GenerateContentFromRename);
       _fsWatcher.EnableRaisingEvents = true;
 
+      // Generate all content on the first run
+      Log.Debug("[Watcher] Generating content for the first time");
+      GenerateContent(true);
       while (true)
       {
         var key = Console.ReadKey(false);
         if (key.Key == ConsoleKey.Enter)
         {
+          Log.Debug("[Watcher] Enter caught, generating content");
           GenerateContent(true);
         }
         if (_quitNotification.WaitOne(new TimeSpan(1), false))
@@ -59,15 +64,18 @@ namespace champ
         }
       }
       _fsWatcher.EnableRaisingEvents = false;
+      Log.Debug("[Watcher] Done.");
     }
 
     private void GenerateContentFromChange(object sender, FileSystemEventArgs e)
     {
+      Log.Debug("[Watcher] A file was added, changed or deleted: " + e.FullPath);
       GenerateContent();
     }
 
     private void GenerateContentFromRename(object sender, RenamedEventArgs e)
     {
+      Log.Debug("[Watcher] A file was renamed to: " + e.FullPath);
       GenerateContent();
     }
 
@@ -83,13 +91,16 @@ namespace champ
           {
             return;
           }
+          Log.Debug("[Watcher] regenerating.");
           Console.Write("{0} {1} change - regenerating...", changeStamp.ToShortTimeString(), isForced ? "Forcing" : "Detected");
-          new SiteBuilder(_source, _destination, _defaultTemplate).Run();
+          var numBrokenPages = new SiteBuilder(_source, _destination, _defaultTemplate).Run();
           Console.WriteLine("done.");
+          Log.Debug("[Watcher] there were {0} broken pages.", numBrokenPages.ToString());
         }
       }
       catch (Exception ex)
       {
+        Log.Debug("[Watcher] caught exception while generating content: " + ex.Message);
         Console.WriteLine("error: {0} - {1}", ex.GetType().Name, ex.Message);
       }
       finally
