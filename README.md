@@ -12,6 +12,9 @@ Features include:
 ## Download champ
 The tool is packaged as a single .exe file. Download the latest release of champ.exe from here: [champ v1.0](https://github.com/lukevenediger/champ/releases/tag/v1.0)
 
+## System Requirements
+* .Net Runtime 4.5.1
+
 ## Getting Started
 Getting started with champ is easy. Copy champ.exe into the root folder of your project, open command prompt 
 and then create your site using the --bootstrap option:
