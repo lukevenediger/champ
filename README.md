@@ -6,6 +6,8 @@ Features include:
 * Uses Razor template syntax for layouts
 * Supports reusable components
 * Callbacks to resolve URLS for subdirectories
+* Automatic conversion of .less files
+* Automatic file regeneration via the --watch option
 
 ## Download champ
 The tool is packaged as a single .exe file. Download the latest release of champ.exe from here: [champ v1.0](https://github.com/lukevenediger/champ/releases/tag/v1.0)
@@ -131,8 +133,7 @@ didn't give me a good first-run experience. So, champ was born, and it suits my 
 These features would be great to have:
 * Better support for blog articles, including RSS feed generation
 * A reusable component for DISQUS comments
-* Automatic minification/LESSification of javascript and LESS files
-* A --watch option that auto-generates files as they are updated
+* Automatic minification of javascript files
 
 # About the Codebase
 Licence: MIT
