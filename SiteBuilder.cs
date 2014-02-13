@@ -73,7 +73,9 @@ namespace champ
       Log.Debug("[SiteBuilder] Copying non-markdown files");
       _sourcePath
         .Subdirectory(Constants.PAGES)
-        .CopyTo(_outputPath, excludedExtensions : new string[] { ".md" });
+        .CopyTo(_outputPath, excludedExtensions: new string[] { ".md" });
+      // Apply .less optimisations
+      _outputPath.ConvertAllLessFiles();
       // Load templates
       LoadTemplates();
       // Build out pages

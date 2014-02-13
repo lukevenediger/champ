@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dotless.Core;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -57,6 +58,19 @@ namespace champ
         .Where(p => !p.Name.StartsWith("."))
         .ToList();
       files.ForEach(p => p.Delete());
+    }
+
+    public static void ConvertAllLessFiles(this DirectoryInfo directory)
+    {
+      directory.GetFiles("*.less", SearchOption.AllDirectories)
+        .ForEach(file =>
+        {
+          var cssFile = Path.ChangeExtension(file.FullName, "css");
+          Log.Debug("[ConvertAllLessFiles] Converting {0} to {1} ", file.FullName, cssFile);
+          var output = Less.Parse(file.ReadAllText());
+          File.WriteAllText(cssFile, output);
+          file.Delete();
+        });
     }
 
     public static DirectoryInfo Subdirectory(this DirectoryInfo directory, string subdirectoryName, bool createIfNotExists = false)
