@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Xipton.Razor;
@@ -175,6 +176,18 @@ namespace champ
             {
                 action(item);
             }
+        }
+
+        public static string ToMD5Hash(this string input)
+        {
+            HashAlgorithm algorithm = MD5.Create();
+            var bytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in bytes)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            return sb.ToString();
         }
     }
 }

@@ -99,8 +99,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)packages\ilmerge.2.13.0307\ILMerge.exe /target:exe /out:$(ProjectDir)build\champ.exe /v4 $(TargetDir)champ-app.exe $(TargetDir)CommandLine.dll $(TargetDir)MarkdownSharp.dll $(TargetDir)Xipton.Razor.dll $(TargetDir)\Ionic.Zip.dll $(TargetDir)\dotless.ClientOnly.dll
-copy $(ProjectDir)build\champ.* C:\GitLab\lib\</PostBuildEvent>
+    <PostBuildEvent>$(SolutionDir)packages\ilmerge.2.13.0307\ILMerge.exe /target:exe /out:$(ProjectDir)build\champ.exe /v4 $(TargetDir)champ-app.exe $(TargetDir)CommandLine.dll $(TargetDir)MarkdownSharp.dll $(TargetDir)Xipton.Razor.dll $(TargetDir)\Ionic.Zip.dll $(TargetDir)\dotless.ClientOnly.dll</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
