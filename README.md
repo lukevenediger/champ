@@ -9,6 +9,12 @@ Features include:
 * Automatic conversion of .less files
 * Automatic file regeneration via the --watch option
 
+## What's New
+
+20-April-2014
+* New examples project: [champ-examples](https://github.com/lukevenediger/champ-examples/)
+* Champ can be used as a library in your project. Use SiteBuilder.ProcessPageNode() 
+
 ## Download champ
 The tool is packaged as a single .exe file. Download the latest release of champ.exe from here: [champ v1.0](https://github.com/lukevenediger/champ/releases/tag/v1.0)
 
@@ -116,6 +122,10 @@ champ.exe --bootstrap --bootstrap-source \\myserver\share\champ\champ-bootstrap.
 ```
 
 If you don't specify --bootstrap-source champ will try download the latest zip file from github.com.
+
+## More Examples
+
+You can find a host of examples, with source and live demo, at the [champ-examples](https://github.com/lukevenediger/champ-examples/) project.
 
 ## Project Info
 
